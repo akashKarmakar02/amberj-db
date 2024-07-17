@@ -1,0 +1,4 @@
+[[database]]
+driver = "sqlite"
+url = "sqlite:db.sql"
+ddl = "update"
