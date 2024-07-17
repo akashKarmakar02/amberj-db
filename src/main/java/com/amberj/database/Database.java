@@ -33,7 +33,7 @@ public class Database {
 
         File file = new File(url.getFile());
         Toml toml = new Toml().read(file);
-        List<HashMap<String, String>> list = toml.getList("database");
+        var list = toml.getTable("database");
 
         Configuration configuration = getConfiguration(list);
 
@@ -130,21 +130,20 @@ public class Database {
         }
     }
 
-    private Configuration getConfiguration(List<HashMap<String, String>> list) {
-        var dbConfig = list.get(0);
+    private Configuration getConfiguration(Toml toml) {
 
         Configuration configuration = new Configuration();
 
-        configuration.setProperty("hibernate.dialect", getDialectFromDriver(dbConfig.get("driver")));
-        configuration.setProperty("hibernate.connection.driver_class", getDriverClassFromDriver(dbConfig.get("driver")));
-        configuration.setProperty("hibernate.connection.url", "jdbc:" + dbConfig.get("url"));
+        configuration.setProperty("hibernate.dialect", getDialectFromDriver(toml.getString("driver")));
+        configuration.setProperty("hibernate.connection.driver_class", getDriverClassFromDriver(toml.getString("driver")));
+        configuration.setProperty("hibernate.connection.url", "jdbc:" + toml.getString("url"));
 
-        if (!Objects.equals(dbConfig.get("driver"), "sqlite")) {
-            configuration.setProperty("hibernate.connection.username", dbConfig.get("username"));
-            configuration.setProperty("hibernate.connection.password", dbConfig.get("password"));
+        if (!Objects.equals(toml.getString("driver"), "sqlite")) {
+            configuration.setProperty("hibernate.connection.username", toml.getString("username"));
+            configuration.setProperty("hibernate.connection.password", toml.getString("password"));
         }
-        if (dbConfig.get("ddl") != null) {
-            configuration.setProperty("hibernate.hbm2ddl.auto", dbConfig.get("ddl"));
+        if (toml.getString("ddl") != null) {
+            configuration.setProperty("hibernate.hbm2ddl.auto", toml.getString("ddl"));
         }
 
         return configuration;
