@@ -39,7 +39,7 @@ public class EntityScanner {
                         if (clazz.isAnnotationPresent(Entity.class)) {
                             entityClasses.add(clazz);
                         }
-                    } catch (ClassNotFoundException _) {
+                    } catch (ClassNotFoundException e) {
                     }
                 }
             }
