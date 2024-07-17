@@ -14,6 +14,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+
     <dependencies>
         <dependency>
             <groupId>org.hibernate.orm</groupId>
@@ -46,12 +57,6 @@
             <artifactId>hibernate-community-dialects</artifactId>
             <version>6.5.2.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>6.5.2.Final</version>
-            <scope>provided</scope>
-        </dependency>
 
     </dependencies>
 
@@ -64,14 +69,26 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.hibernate</groupId>
-                            <artifactId>hibernate-jpamodelgen</artifactId>
-                            <version>6.5.2.Final</version>
-                        </path>
-                    </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                     <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
