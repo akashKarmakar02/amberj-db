@@ -66,6 +66,24 @@ public class Database {
         }
     }
 
+    public void update(Object entity) {
+        if (!entity.getClass().isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("Object is not annotated with @Entity");
+        }
+
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(entity);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println("Error updating(" + entity.getClass() + "): " + e.getMessage());
+        }
+    }
+
     public <T> Command<T> query(Class<T> entityClass) {
         return new Command<>(this, entityClass);
     }
